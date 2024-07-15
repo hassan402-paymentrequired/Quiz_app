@@ -16,7 +16,7 @@ class Database
     
     }
 
-    public function query($query, $param=[]) {
+    public function  query($query, $param=[]) {
 
         $statement = $this->connection->prepare($query);
 
@@ -25,8 +25,11 @@ class Database
         return $statement;
         
     }
+}
 
-   
-
-
+class DatabaseConnection 
+{
+    public static function connect() {
+       return new Database();
+    }
 }

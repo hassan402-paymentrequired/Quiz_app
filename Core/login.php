@@ -1,94 +1,36 @@
 <?php
+
 namespace Core;
 
-use Database;
+use Redirect;
 
-// use Core\Validate;
-
-require('../config/database.php');
-
-
-// session_start();
-// use Database;
-require('./function.php');
-// require('../config/database.php');
-
-session_start();
+require("./AuthenticatUser.php");
+include("../utils/redirect.php");
 
 
-if(isset($_POST['login'])){
+if (isset($_POST['login'])) {
     $email = trim(htmlspecialchars($_POST['email']));
     $password = trim(htmlspecialchars($_POST['password']));
 
 
-    $validateEmail = new Validate();
-
-    $valid_email = $validateEmail::validateEmail($email);
-
-
-
-    if(!$valid_email){
-        $_SESSION['email_error'] = 'invalid email';
-        header('Location: /login ');
-        exit();
-    }
-
-    if(strlen($password) < 5){
-        $_SESSION['password_error'] = 'invalid password';
-        header('Location: /login ');
-        exit();
-    }
-
- 
-
-  try {
-
-    $db = new Database();
   
-    $user = $db->query("SELECT * FROM users WHERE email = ?", [$email])->fetch();
+    $userLogin = new AuthenticateUser();
 
-    if(!$user){
-        $_SESSION['password_error'] = 'No user with that credentials found please sign up';
-        header('Location: /login ');
-        exit();
-     
-    }
-    else{
- 
+    $validateUser = $userLogin->login($email, $password);
 
-        if(password_verify($password, $user['password'])){
-
-    
-
-            $_SESSION['user'] = $user;
-
-        
-
-            if($user['role'] ===  "admin"){
-                header('Location: /views/Admin/dashboard.php');
-            }else{
-                header('Location: /');
-            }
-
-
-
-            
-            exit();
-        }
-        else{
-            $_SESSION['password_error'] = 'No user with that credentials found please sign up';
-            header('Location: /login ');
-            exit();
-        }
-
-        
-
+    if (!$validateUser) {
+        $_SESSION['error'] = "No user with credentials provided";
+        return new Redirect("/login");
     }
 
 
+    $_SESSION['user'] = $validateUser;
 
-  } catch (\Throwable $th) {
-    //throw $th;
-  }
+    if ($validateUser['role'] ===  "admin") {
+        return new Redirect("/views/Admin/dashboard.php");
+    }
+
+    return new Redirect('/');
+
 
 }

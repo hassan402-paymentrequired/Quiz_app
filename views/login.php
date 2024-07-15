@@ -26,8 +26,8 @@
         Email
       </label>
       <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-email" type="text" placeholder="joe@gmail" name="email">
-      <?php if( $_SESSION['email_error'] ?? '') :?>
-      <p class="text-red-500 text-xs italic"><?php echo $_SESSION['email_error']?? ''  ?></p>
+      <?php if( $_SESSION['error'] ?? '') :?>
+      <p class="text-red-500 text-xs italic"><?php echo $_SESSION['error']?? ''  ?></p>
       <?php endif ?>
     </div>
     <div class="w-full  px-3">
@@ -35,8 +35,8 @@
         password
       </label>
       <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="password" placeholder="****" name="password">
-      <?php if($_SESSION['password_error'] ?? '') :?>
-      <p class="text-red-500 text-xs italic"><?php echo $_SESSION['password_error'] ?></p>
+      <?php if($_SESSION['error'] ?? '') :?>
+      <p class="text-red-500 text-xs italic"><?php echo $_SESSION['error'] ?></p>
       <?php endif ?>
     </div>
     <div class="flex justify-between items-center w-full px-5 mt-1">
@@ -55,8 +55,7 @@
 
 
 
-<?php unset($_SESSION['email_error']) ?>
-<?php unset($_SESSION['password_error']) ?>
+<?php unset($_SESSION['error']) ?>
 <?php unset($_SESSION['email'] ) ?>
 
 
